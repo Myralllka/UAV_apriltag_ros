@@ -69,7 +69,7 @@ TagDetector::TagDetector(ros::NodeHandle pnh) :
       standalone_tag_descriptions_ =
           parseStandaloneTags(standalone_tag_descriptions);
     }
-    catch(XmlRpc::XmlRpcException e)
+    catch(XmlRpc::XmlRpcException &e)
     {
       // in case any of the asserts in parseStandaloneTags() fail
       ROS_ERROR_STREAM("Error loading standalone tag descriptions: " <<
@@ -90,7 +90,7 @@ TagDetector::TagDetector(ros::NodeHandle pnh) :
     {
       tag_bundle_descriptions_ = parseTagBundles(tag_bundle_descriptions);
     }
-    catch(XmlRpc::XmlRpcException e)
+    catch(XmlRpc::XmlRpcException &e)
     {
       // In case any of the asserts in parseStandaloneTags() fail
       ROS_ERROR_STREAM("Error loading tag bundle descriptions: " <<
@@ -395,7 +395,8 @@ AprilTagDetectionArray TagDetector::detectTags (
       tf_pub_.sendTransform(tf::StampedTransform(tag_transform,
                                                  tag_transform.stamp_,
                                                  image->header.frame_id,
-                                                 detection_names[i]));
+                                                 image->header.frame_id + "/" + detection_names[i]));
+//                                                 detection_names[i]));
     }
   }
 
