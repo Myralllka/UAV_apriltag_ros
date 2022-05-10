@@ -55,6 +55,7 @@ void ContinuousDetector::onInit ()
       it_->subscribeCamera("image_rect", 1,
                           &ContinuousDetector::imageCallback, this,
                           image_transport::TransportHints(transport_hint));
+  tag_corners_publisher_ = nh.advertise<PointLabeledArray>("corners", 1);
   tag_detections_publisher_ =
       nh.advertise<AprilTagDetectionArray>("tag_detections", 1);
   if (draw_tag_detections_image_)
@@ -89,7 +90,6 @@ void ContinuousDetector::imageCallback (
     ROS_ERROR("cv_bridge exception: %s", e.what());
     return;
   }
-
   // Publish detected tags in the image by AprilTag 2
   tag_detections_publisher_.publish(
       tag_detector_->detectTags(cv_image_,camera_info));
@@ -101,6 +101,8 @@ void ContinuousDetector::imageCallback (
     tag_detector_->drawDetections(cv_image_);
     tag_detections_image_publisher_.publish(cv_image_->toImageMsg());
   }
+    auto corners = tag_detector_->getCorners();
+    tag_corners_publisher_.publish(corners);
 }
 
 } // namespace apriltag_ros

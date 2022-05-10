@@ -63,6 +63,7 @@ class ContinuousDetector: public nodelet::Nodelet
   void imageCallback(const sensor_msgs::ImageConstPtr& image_rect,
                      const sensor_msgs::CameraInfoConstPtr& camera_info);
 
+    ros::Publisher tag_corners_publisher_;
  private:
   std::shared_ptr<TagDetector> tag_detector_;
   bool draw_tag_detections_image_;
