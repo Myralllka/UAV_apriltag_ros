@@ -478,14 +478,14 @@ namespace apriltag_ros {
             // MRS CODE PART: Publish corners!!!!
 
             PointLabeled lu, lb, ru, rb;
-            lu.x = static_cast<int32_t>(det->p[0][0]);
-            lu.y = static_cast<int32_t>(det->p[0][1]);
-            ru.x = static_cast<int32_t>(det->p[1][0]);
-            ru.y = static_cast<int32_t>(det->p[1][1]);
-            rb.x = static_cast<int32_t>(det->p[2][0]);
-            rb.y = static_cast<int32_t>(det->p[2][1]);
-            lb.x = static_cast<int32_t>(det->p[3][0]);
-            lb.y = static_cast<int32_t>(det->p[3][1]);
+            lu.x = static_cast<int32_t>(det->p[1][0]);
+            lu.y = static_cast<int32_t>(det->p[1][1]);
+            ru.x = static_cast<int32_t>(det->p[2][0]);
+            ru.y = static_cast<int32_t>(det->p[2][1]);
+            rb.x = static_cast<int32_t>(det->p[3][0]);
+            rb.y = static_cast<int32_t>(det->p[3][1]);
+            lb.x = static_cast<int32_t>(det->p[0][0]);
+            lb.y = static_cast<int32_t>(det->p[0][1]);
 
             lu.id = tagID;
             ru.id = tagID;
@@ -496,9 +496,9 @@ namespace apriltag_ros {
             rb.type = 3;
             lb.type = 4;
             points.detections.push_back(lu);
-            points.detections.push_back(lb);
             points.detections.push_back(ru);
             points.detections.push_back(rb);
+            points.detections.push_back(lb);
 
             // ===================================================================
         }
@@ -546,7 +546,19 @@ namespace apriltag_ros {
             line(image->image, cv::Point((int) det->p[2][0], (int) det->p[2][1]),
                  cv::Point((int) det->p[3][0], (int) det->p[3][1]),
                  cv::Scalar(0xff, 0, 0)); // blue
-
+            // for debugging
+            cv::Point2d lu, lb, ru, rb;
+            lu.x = static_cast<int32_t>(det->p[1][0]);
+            lu.y = static_cast<int32_t>(det->p[1][1]);
+            ru.x = static_cast<int32_t>(det->p[2][0]);
+            ru.y = static_cast<int32_t>(det->p[2][1]);
+            rb.x = static_cast<int32_t>(det->p[3][0]);
+            rb.y = static_cast<int32_t>(det->p[3][1]);
+            lb.x = static_cast<int32_t>(det->p[0][0]);
+            lb.y = static_cast<int32_t>(det->p[0][1]);
+            cv::circle(image->image, lu, 2, cv::Scalar(0, 0, 0xff), 3);
+            cv::circle(image->image, ru, 2, cv::Scalar(0, 0xff, 0), 3);
+            cv::circle(image->image, rb, 2, cv::Scalar(0xff, 0, 0), 3);
             // Print tag ID in the middle of the tag
             std::stringstream ss;
             ss << det->id;
